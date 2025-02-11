@@ -51,7 +51,7 @@ def clean_data(df):
 
 def run_model(df):
     # Step 5: Prepare Data for Modeling
-    X = df.drop(['popularity', 'title', 'artist', 'top genre', 'year'], axis=1)
+    X = df.drop(['popularity', 'title', 'artist', 'year'], axis=1)
     Y = df['popularity']
 
     print("Features (X):")
@@ -76,7 +76,7 @@ def run_model(df):
     preprocessor = ColumnTransformer(
         transformers=[
             ('num', StandardScaler(), numerical_cols),
-            ('cat', OneHotEncoder(), categorical_cols)
+            ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_cols)
         ]
     )
     
@@ -97,13 +97,9 @@ def run_model(df):
     
     # Implement Grid Search with Cross-Validation
     grid_search = GridSearchCV(model_pipeline, param_grid, cv=5, scoring='neg_mean_squared_error', return_train_score=True, error_score = 'raise')
-    
-
-    # Fit the model using the training data
-    print("Fitting the model...")
     grid_search.fit(X_train, Y_train)
-    
-   
+
+
     print("Best parameters found: ", grid_search.best_params_)
     
     
@@ -121,10 +117,11 @@ def run_model(df):
     # Step 11: Feature Importance (Optional)
     feature_importances = best_model.named_steps['regressor'].feature_importances_
     feature_names = (preprocessor.named_transformers_['num'].get_feature_names_out(numerical_cols).tolist() +
-                    list(preprocessor.named_transformers_['cat'].get_feature_names_out(categorical_cols)))
+                    list(preprocessor.named_transformers['cat'].get_feature_names_out(categorical_cols)))
 
     feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': feature_importances})
     feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
+    print("Feature Importances:")
     print(feature_importance_df) 
     
 
@@ -134,4 +131,7 @@ if __name__== "__main__":
 
     print('Building model... ')
     run_model(cleaned_data)
+
+
+
 
