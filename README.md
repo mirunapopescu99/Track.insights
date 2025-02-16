@@ -38,3 +38,4 @@ https://www.kaggle.com/datasets/conorvaneden/best-songs-on-spotify-for-every-yea
 Handling Missing Values: The code efficiently fills missing values by using column means, ensuring that no numerical column has NaN values.
 Data Type Conversion: The numeric columns are converted correctly to avoid any type-related errors.
 Model Training and Evaluation: The code implements a Random Forest model with hyperparameter tuning, allowing dynamic optimization of model parameters.
+This code is still in the process of being updated and perfected for a more accurate read. 
